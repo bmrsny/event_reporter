@@ -1,18 +1,23 @@
+require 'event_reporter/printer'
 module EventReporter
   class CLI
+    attr_reader :printer
     attr_accessor :command, :instream, :outstream
 
     def initialize(instream, outstream)
       @instream = instream
       @outstream = outstream
       @command = ''
+      @printer = Printer.new(outstream)
     end
 
     def call
+      printer.intro_message
       until quit?
         get_input
         process_command
       end
+      printer.outro_message
     end
 
     def process_command
@@ -23,7 +28,7 @@ module EventReporter
       when help?
       when quit?
       else
-        puts "Invalid Command"
+        printer.invalid_command
       end
     end
 
@@ -48,6 +53,7 @@ module EventReporter
     end
 
     def get_input
+      printer.command_prompt
       self.command = instream.gets
                              .strip
                              .downcase
