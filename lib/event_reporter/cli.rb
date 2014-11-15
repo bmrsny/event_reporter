@@ -18,13 +18,9 @@ module EventReporter
     def process_command
       case
       when load?
-        puts "load dfsdg "
       when find?
-        puts "find sd "
       when queue?
-        puts "queue ssdg"
       when help?
-        puts "help sdfsdf"
       when quit?
       else
         puts "Invalid Command"
