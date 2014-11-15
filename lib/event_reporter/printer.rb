@@ -21,5 +21,9 @@ module EventReporter
     def outro_message
       outstream.puts "Goodbye"
     end
+
+    def invalid_load_criteria(criteria_length)
+      outstream.puts "Invalid load criteria: you entered #{criteria_length} criterion, should have been 1 or 0."
+    end
   end
 end

@@ -3,5 +3,5 @@
 lib_dir = File.expand_path('../../lib',__FILE__)
 $LOAD_PATH.unshift(lib_dir)
 
-require 'event_reporter/cli'
+require 'event_reporter'
 EventReporter::CLI.new($stdin, $stdout).call
