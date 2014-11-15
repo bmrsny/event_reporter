@@ -1,7 +1,7 @@
 module EventReporter
   class Load
-    attr_reader :criteria, :printer
-    attr_accessor :file_name
+    attr_reader :printer
+    attr_accessor :file_name, :criteria
 
     def initialize(instream, outstream, printer, criteria)
       @instream = instream
