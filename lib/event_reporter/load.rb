@@ -18,23 +18,34 @@ module EventReporter
       load_file
     end
 
+    def load_file
+      generate_file_path
+      contents = read_in_csv
+      csv_rows = contents.map { |row| row.to_hash }
+      @@entry_repository = EventReporter::EntryRepository.new(csv_rows)
+    end
+
     def get_filename
-      if criteria.length == 0
-        self.file_name = 'event_attendees.csv'
-      elsif criteria.length == 1
-        self.file_name = criteria[0]
-      else
-        printer.invalid_load_criteria(criteria.length)
+      if    no_criteria?   then self.file_name = 'event_attendees.csv'
+      elsif one_criterion? then self.file_name = criteria[0]
+      else                      printer.invalid_load_criteria(criteria.length)
       end
     end
 
-    def load_file
-      file_path = File.join(EventReporter::LOAD_FILE_DIR,file_name)
-      contents = CSV.open file_path, headers: true, header_converters: :symbol
-      csv_rows = contents.map do |row|
-        row.to_hash
-      end
-      @@entry_repository = EventReporter::EntryRepository.new(csv_rows)
+    def generate_file_path
+      File.join(EventReporter::LOAD_FILE_DIR,file_name)
+    end
+
+    def read_in_csv
+      CSV.open file_path, headers: true, header_converters: :symbol
+    end
+
+    def no_criteria?
+      criteria.length == 0
+    end
+
+    def one_criterion?
+      criteria.lenth == 1
     end
   end
 end
