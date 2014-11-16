@@ -36,7 +36,6 @@ module EventReporter
         row.to_hash
       end
       @@entry_repository = EventReporter::EntryRepository.new(csv_rows)
-      puts @@entry_repository.entries[0].first_name
     end
     # read file
     # parse file
