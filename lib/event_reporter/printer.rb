@@ -7,7 +7,7 @@ module EventReporter
     end
 
     def invalid_command
-      outstream.puts "Invalid Command"
+      outstream.puts ">>> Invalid Command"
     end
 
     def intro_message
@@ -23,7 +23,15 @@ module EventReporter
     end
 
     def invalid_load_criteria(criteria_length)
-      outstream.puts "Invalid load criteria: you entered #{criteria_length} criterion, should have been 1 or 0."
+      outstream.puts ">>> Invalid load criteria: you entered #{criteria_length} criterion, should have been 1 or 0."
+    end
+
+    def invalid_file_name(file_name)
+      outstream.puts ">>> '#{file_name}' does not exist in the projects 'files' directory"
+    end
+
+    def confirm_file_load(entry_repo_size)
+      outstream.puts ">>> Load Complete: #{entry_repo_size} entries in the entry repository"
     end
   end
 end
