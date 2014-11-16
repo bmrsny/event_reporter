@@ -35,6 +35,14 @@ RSpec.describe EventReporter::Load do
   end
 
   context "when loading a file" do
+    it "generates a load path"
 
+    it "checks if a file exists"
+
+    it "reads in a csv file"
+
+    it "converts csv row objects to hashes"
+
+    it "creates a new EntryRepository object"
   end
 end
