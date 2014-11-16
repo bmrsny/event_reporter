@@ -17,7 +17,7 @@ module EventReporter
     def call
       return invalid_criterion_msg if !valid_criteria?
       get_filename
-      return invalid_file_name if !file_exists?
+      return invalid_filename_msg if !file_exists?
       load_file
     end
 
