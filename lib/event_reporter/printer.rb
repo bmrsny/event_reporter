@@ -33,5 +33,9 @@ module EventReporter
     def confirm_file_load(entry_repo_size)
       outstream.puts ">>> Load Complete: #{entry_repo_size} entries in the entry repository"
     end
+
+    def invalid_queue_command(criteria)
+      outstream.puts ">>> Invalid queue criteria: You entered 'queue #{criteria}', not valid"
+    end
   end
 end
