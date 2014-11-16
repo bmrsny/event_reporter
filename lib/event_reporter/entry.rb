@@ -17,11 +17,11 @@ module EventReporter
       @first_name = name_cleaner(data[:first_name])
       @last_name  = name_cleaner(data[:last_name])
       @email      = data[:email]
-      @phone      = data[:homephone]
-      @street     = data[:street]
-      @city       = data[:city]
-      @state      = data[:state]
-      @zipcode    = data[:zipcode]
+      @phone      = phone_cleaner(data[:homephone])
+      @street     = street_cleaner(data[:street])
+      @city       = city_cleaner(data[:city])
+      @state      = state_cleaner(data[:state])
+      @zipcode    = zipcode_cleaner(data[:zipcode])
     end
 
     def name_cleaner(name)
@@ -38,6 +38,29 @@ module EventReporter
         clean_number
       else
         "No valid phone number"
+      end
+    end
+    def street_cleaner(street)
+      if street.nil? || street.empty?
+        "No street provided"
+      else
+        street
+      end
+    end
+
+    def city_cleaner(city)
+      if city.nil? || city.empty?
+        "No city provided"
+      else
+        city
+      end
+    end
+
+    def state_cleaner(state)
+      if state.nil? || state.empty?
+        "No state provided"
+      else
+        state
       end
     end
   end
