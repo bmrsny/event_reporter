@@ -1,3 +1,5 @@
+require 'csv'
+
 module EventReporter
   class Load
     attr_reader :printer
@@ -13,6 +15,8 @@ module EventReporter
 
     def call
       get_filename
+      load_file
+      #save_to_datastore
     end
 
     def get_filename
@@ -24,8 +28,16 @@ module EventReporter
         printer.invalid_load_criteria(criteria.length)
       end
     end
-    # look at filename
-    # check for valid filename
+
+    def load_file
+      file_path = File.join(EventReporter::LOAD_FILE_DIR,file_name)
+      contents = CSV.open file_path, headers: true, header_converters: :symbol
+      csv_rows = contents.map do |row|
+        row.to_hash
+      end
+      @@entry_repository = EventReporter::EntryRepository.new(csv_rows)
+      puts @@entry_repository.entries[0].first_name
+    end
     # read file
     # parse file
     # save the results to data-store
