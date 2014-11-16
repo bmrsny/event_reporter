@@ -27,5 +27,18 @@ module EventReporter
     def name_cleaner(name)
       name
     end
+
+    def zipcode_cleaner(zipcode)
+      zipcode.to_s.rjust(5, '0')[0..4]
+    end
+
+    def phone_cleaner(phone)
+      clean_number = phone.gsub(/[^\d]/,'')
+      if clean_number.length == 10 || clean_number.length == 11
+        clean_number
+      else
+        "No valid phone number"
+      end
+    end
   end
 end
