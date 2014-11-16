@@ -16,7 +16,6 @@ module EventReporter
     def call
       get_filename
       load_file
-      #save_to_datastore
     end
 
     def get_filename
@@ -37,8 +36,5 @@ module EventReporter
       end
       @@entry_repository = EventReporter::EntryRepository.new(csv_rows)
     end
-    # read file
-    # parse file
-    # save the results to data-store
   end
 end
