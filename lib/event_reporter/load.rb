@@ -38,7 +38,7 @@ module EventReporter
     end
 
     def valid_criteria?
-      criteria.length == 0 || criteria.length == 1
+      no_criteria? || one_criterion?
     end
 
     def file_exists?
@@ -67,7 +67,6 @@ module EventReporter
 
     def invalid_filename_msg
       printer.invalid_file_name(file_name)
-      return
     end
   end
 end
