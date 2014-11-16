@@ -11,13 +11,14 @@ module EventReporter
       @outstream  = outstream
       @printer    = printer
       @criteria   = criteria
-      @file_name  = ''
+      @file_name  = 'event_attendees.csv'
     end
 
     def call
+      return invalid_criterion_msg if !valid_criteria?
       get_filename
-      file_exists? ? load_file : printer.invalid_file_name(file_name)
-      printer.confirm_file_load(@@entry_repository.entries.length)
+      return invalid_file_name if !file_exists?
+      load_file
     end
 
     def load_file
@@ -25,17 +26,19 @@ module EventReporter
       contents           = read_in_csv(file_path)
       csv_rows           = contents.map { |row| row.to_hash }
       @@entry_repository = EventReporter::EntryRepository.new(csv_rows)
+      confirm_load
     end
 
     def get_filename
-      if    no_criteria?   then self.file_name = 'event_attendees.csv'
-      elsif one_criterion? then self.file_name = criteria[0]
-      else                      printer.invalid_load_criteria(criteria.length)
-      end
+      self.file_name = criteria[0] if one_criterion?
     end
 
     def generate_file_path
       File.join(EventReporter::LOAD_FILE_DIR, file_name)
+    end
+
+    def valid_criteria?
+      criteria.length == 0 || criteria.length == 1
     end
 
     def file_exists?
@@ -46,12 +49,25 @@ module EventReporter
       CSV.open file_path, headers: true, header_converters: :symbol
     end
 
+    def confirm_load
+      printer.confirm_file_load(@@entry_repository.entries.length)
+    end
+
     def no_criteria?
       criteria.length == 0
     end
 
     def one_criterion?
       criteria.length == 1
+    end
+
+    def invalid_criterion_msg
+      printer.invalid_load_criteria(criteria.length)
+    end
+
+    def invalid_filename_msg
+      printer.invalid_file_name(file_name)
+      return
     end
   end
 end
