@@ -40,6 +40,7 @@ module EventReporter
         "No valid phone number"
       end
     end
+
     def street_cleaner(street)
       if street.nil? || street.empty?
         "No street provided"

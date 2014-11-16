@@ -35,7 +35,17 @@ module EventReporter
     end
 
     def invalid_queue_command(criteria)
-      outstream.puts ">>> Invalid queue criteria: You entered 'queue #{criteria}', not valid"
+      outstream.puts ">>> Invalid queue criteria: You entered 'queue #{criteria}' which is not valid command"
+      outstream.puts ">>> For help, type 'help queue'"
+    end
+
+    def invalid_find_command(criteria)
+      outstream.puts ">>> Invalid find criteria: You entered 'find #{criteria}' which is not valid command"
+      outstream.puts ">>> For help, type 'help find'"
+    end
+
+    def invalid_find_attribute(attribute)
+      outstream.puts ">>> Invalid attribute: '#{attribute}' is not a valid search attribute"
     end
   end
 end
