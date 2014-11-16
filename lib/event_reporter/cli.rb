@@ -26,6 +26,7 @@ module EventReporter
         EventReporter::Load.new(instream, outstream, printer, criteria).call
       when find?
       when queue?
+        EventReporter::Queue.new(instream, outstream, printer, criteria).call
       when help?
       when quit?
       else
