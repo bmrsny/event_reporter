@@ -33,7 +33,7 @@ module EventReporter
     end
 
     def generate_file_path
-      File.join(EventReporter::LOAD_FILE_DIR,file_name)
+      File.join(EventReporter::LOAD_FILE_DIR, file_name)
     end
 
     def read_in_csv
@@ -45,7 +45,7 @@ module EventReporter
     end
 
     def one_criterion?
-      criteria.lenth == 1
+      criteria.length == 1
     end
   end
 end
