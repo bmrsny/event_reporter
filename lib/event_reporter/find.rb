@@ -17,15 +17,7 @@ module EventReporter
     end
 
     def find_valid_entries
-      if $queue_repository.nil?
-        printer.print_number_found(0)
-      else
-        found = $entry_repository.entries.select do |entry|
-          entry.send(criteria[0].to_sym).downcase == criteria[1]
-        end
-        printer.print_number_found(found.length)
-        $queue_repository = EventReporter::QueueRepository.new(found)
-      end
+      $entry_repository.nil? ? print_found(0) : find_entries
     end
 
     def valid_criteria?
@@ -35,6 +27,26 @@ module EventReporter
     def valid_attribute?
       valid_attributes = EventReporter::Entry.instance_methods(false).grep(/^((?!cleaner).)*$/)
       valid_attributes.include?(criteria[0].to_sym)
+    end
+
+    def find_entries
+      found = get_matching_entries
+      print_found(found.length)
+      populate_queue(found)
+    end
+
+    def get_matching_entries
+      $entry_repository.entries.select do |entry|
+        entry.send(criteria[0].to_sym).downcase == criteria[1]
+      end
+    end
+
+    def print_found(num)
+      printer.print_number_found(num)
+    end
+
+    def populate_queue(found)
+      $queue_repository = EventReporter::QueueRepository.new(found)
     end
   end
 end
