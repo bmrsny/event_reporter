@@ -16,7 +16,7 @@ module EventReporter
       @reg_date   = data[:regdate]
       @first_name = name_cleaner(data[:first_name])
       @last_name  = name_cleaner(data[:last_name])
-      @email      = data[:email]
+      @email      = data[:email_address]
       @phone      = phone_cleaner(data[:homephone])
       @street     = street_cleaner(data[:street])
       @city       = city_cleaner(data[:city])
@@ -40,6 +40,7 @@ module EventReporter
         "No valid phone number"
       end
     end
+
     def street_cleaner(street)
       if street.nil? || street.empty?
         "No street provided"
