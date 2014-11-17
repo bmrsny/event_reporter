@@ -10,7 +10,7 @@ module EventReporter
       @criteria   = criteria
     end
 
-    @@valid_commands = ["count", "clear", "print", "print by", "save to"]
+    $valid_commands = ["count", "clear", "print", "print by", "save to"]
 
     def call
       return printer.invalid_queue_command(criteria.join(" ")) if !valid_criteria?
@@ -33,8 +33,8 @@ module EventReporter
     end
 
     def valid_criteria?
-      if criteria.length == 1 && @@valid_commands.include?(criteria[0]) then true
-      elsif criteria.length == 3 && @@valid_commands.include?(criteria[0..1].join(" ")) then true
+      if criteria.length == 1 && $valid_commands.include?(criteria[0]) then true
+      elsif criteria.length == 3 && $valid_commands.include?(criteria[0..1].join(" ")) then true
       else false
       end
     end

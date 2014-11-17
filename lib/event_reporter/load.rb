@@ -25,7 +25,7 @@ module EventReporter
       file_path          = generate_file_path
       contents           = read_in_csv(file_path)
       csv_rows           = contents.map { |row| row.to_hash }
-      @@entry_repository = EventReporter::EntryRepository.new(csv_rows)
+      $entry_repository = EventReporter::EntryRepository.new(csv_rows)
       confirm_load
     end
 
@@ -50,7 +50,7 @@ module EventReporter
     end
 
     def confirm_load
-      printer.confirm_file_load(@@entry_repository.entries.length)
+      printer.confirm_file_load($entry_repository.entries.length)
     end
 
     def no_criteria?

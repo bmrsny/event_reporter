@@ -10,6 +10,6 @@ require 'event_reporter/find'
 module EventReporter
   LOAD_FILE_DIR = '././files/'
 
-  @@entry_repository = nil
-  @@queue            = nil
+  $entry_repository = nil
+  $queue            = nil
 end

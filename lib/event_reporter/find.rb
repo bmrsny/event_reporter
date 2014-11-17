@@ -13,6 +13,14 @@ module EventReporter
     def call
       return printer.invalid_find_command(criteria.join(" ")) if !valid_criteria?
       return printer.invalid_find_attribute(criteria[0]) if !valid_attribute?
+      find_valid_entries
+    end
+
+    def find_valid_entries
+      new_entry = $entry_repository.entries.select do |entry|
+        entry.instance_variable_get("@#{criteria[0]}") == criteria[1].to_s
+      end
+      puts new_entry
     end
 
     def valid_criteria?
