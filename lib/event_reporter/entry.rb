@@ -42,27 +42,16 @@ module EventReporter
     end
 
     def street_cleaner(street)
-      if street.nil? || street.empty?
-        "No street provided"
-      else
-        street
-      end
+      street.to_s.empty? ? "No address provided" : street
     end
 
     def city_cleaner(city)
-      if city.nil? || city.empty?
-        "No city provided"
-      else
-        city
-      end
+      city.to_s.empty? ? "No city provided" : city
     end
 
     def state_cleaner(state)
-      if state.nil? || state.empty?
-        "No state provided"
-      else
-        state
-      end
+      state.to_s.empty? ? "No state provided" : state
     end
+
   end
 end

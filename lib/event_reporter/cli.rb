@@ -22,16 +22,12 @@ module EventReporter
 
     def process_command
       case
-      when load?
-        EventReporter::Load.new(instream, outstream, printer, criteria).call
-      when find?
-        EventReporter::Find.new(instream, outstream, printer, criteria).call
-      when queue?
-        EventReporter::Queue.new(instream, outstream, printer, criteria).call
+      when load?  then EventReporter::Load.new(instream, outstream, printer, criteria).call
+      when find?  then EventReporter::Find.new(instream, outstream, printer, criteria).call
+      when queue? then EventReporter::Queue.new(instream, outstream, printer, criteria).call
       when help?
       when quit?
-      else
-        printer.invalid_command
+      else             printer.invalid_command
       end
     end
 
