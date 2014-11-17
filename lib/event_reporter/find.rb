@@ -21,7 +21,7 @@ module EventReporter
     end
 
     def valid_criteria?
-      criteria.length == 2
+      criteria.length >= 2
     end
 
     def valid_attribute?
@@ -30,14 +30,15 @@ module EventReporter
     end
 
     def find_entries
-      found = get_matching_entries
+      search_criteria = criteria[1..-1].join(" ")
+      found = get_matching_entries(search_criteria)
       print_found(found.length)
       populate_queue(found)
     end
 
-    def get_matching_entries
+    def get_matching_entries(search_criteria)
       $entry_repository.entries.select do |entry|
-        entry.send(criteria[0].to_sym).downcase == criteria[1]
+        entry.send(criteria[0].to_sym).downcase == search_criteria
       end
     end
 
