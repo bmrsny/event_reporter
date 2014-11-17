@@ -11,7 +11,7 @@ module EventReporter
       @criteria   = criteria
     end
 
-    $valid_commands = ["count", "clear", "print", "print by", "save to"]
+    @@valid_commands = ["count", "clear", "print", "print by", "save to"]
 
     def call
       return printer.invalid_queue_command(criteria.join(" ")) if !valid_criteria?
@@ -33,11 +33,11 @@ module EventReporter
     end
 
     def valid_single_criterion?
-      criteria.length == 1 && $valid_commands.include?(criteria[0])
+      criteria.length == 1 && @@valid_commands.include?(criteria[0])
     end
 
     def valid_multi_criterion?
-      criteria.length == 3 && $valid_commands.include?(criteria[0..1].join(" "))
+      criteria.length == 3 && @@valid_commands.include?(criteria[0..1].join(" "))
     end
 
     def queue_count
@@ -90,15 +90,14 @@ module EventReporter
     end
 
     def confirm_overwrite
+      response = confirm_prompt
+      confirmed?(response) ? create_csv : printer.file_not_overwritten
+    end
+
+    def confirm_prompt
       printer.confirm_file_overwrite(criteria[2])
       printer.confirm_overwrite_prompt
-      response = instream.gets.strip.downcase
-      if confirmed?(response)
-        create_csv
-        printer.confirm_file_saved(criteria[2])
-      else
-        printer.file_not_overwritten
-      end
+      instream.gets.strip.downcase
     end
 
     def confirmed?(response)
