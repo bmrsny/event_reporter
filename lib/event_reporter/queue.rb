@@ -107,31 +107,34 @@ module EventReporter
     def create_csv
       file = generate_file_path
       CSV.open(file, "wb") do |csv|
-        csv << ["Last_Name",
-                "First_Name",
-                "Email_Address",
-                "Zipcode",
-                "City",
-                "State",
-                "Address",
-                "HomePhone"]
-
-        if $queue_repository.nil?
-          return
-        else
-          $queue_repository.entries.each do |entry|
-            csv << ["#{entry.last_name}",
-                    "#{entry.first_name}",
-                    "#{entry.email}",
-                    "#{entry.zipcode}",
-                    "#{entry.city}",
-                    "#{entry.state}",
-                    "#{entry.street}",
-                    "#{entry.phone}"]
-          end
-        end
+        csv << csv_col_headers
+        add_csv_rows(csv) unless $queue_repository.nil?
       end
       printer.confirm_file_saved(criteria[2])
+    end
+
+    def csv_col_headers
+      ["Last_Name",
+       "First_Name",
+       "Email_Address",
+       "Zipcode",
+       "City",
+       "State",
+       "Address",
+       "HomePhone"]
+    end
+
+    def add_csv_rows(csv)
+      $queue_repository.entries.each do |entry|
+        csv << ["#{entry.last_name}",
+                "#{entry.first_name}",
+                "#{entry.email}",
+                "#{entry.zipcode}",
+                "#{entry.city}",
+                "#{entry.state}",
+                "#{entry.street}",
+                "#{entry.phone}"]
+      end
     end
 
     def file_exists?
