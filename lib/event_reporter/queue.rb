@@ -22,11 +22,11 @@ module EventReporter
       when count?
         print_queue_count
       when clear?
-        puts "cleared"
+        queue_clear
       when print?
-        puts "printed"
+        queue_print
       when print_by?
-        puts "print by string"
+        queue_print_by
       when save_to?
         puts "saved to"
       end
@@ -40,12 +40,38 @@ module EventReporter
     end
 
     def queue_count
-      $queue_repository.entries.length
+      $queue_repository.nil? ? 0 : $queue_repository.entries.length
     end
 
     def print_queue_count
-      count = $queue_repository.nil? ? 0 : queue_count
-      printer.print_queue_count(count)
+      printer.print_queue_count(queue_count)
+    end
+
+    def queue_clear
+      $queue_repository = nil
+      printer.print_queue_cleared(queue_count)
+    end
+
+    def queue_print
+      if queue_count == 0
+        printer.print_nothing_to_print
+      else
+        printer.print_queue_headers
+        $queue_repository.entries.each do |entry|
+          printer.print_queue_row(entry)
+        end
+      end
+    end
+
+    def queue_print_by
+      queue_sort
+      queue_print
+    end
+
+    def queue_sort
+      $queue_repository.entries = $queue_repository.entries.sort_by do |entry|
+        entry.send(criteria[2].to_sym).downcase
+      end
     end
 
     def count?

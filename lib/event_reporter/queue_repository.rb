@@ -1,6 +1,6 @@
 module EventReporter
   class QueueRepository
-    attr_reader :entries
+    attr_accessor :entries
 
     def initialize(entries)
       @entries = entries
