@@ -20,24 +20,24 @@ module EventReporter
 
     def process_command
       case
-      when count?
-        print_queue_count
-      when clear?
-        queue_clear
-      when print?
-        queue_print
-      when print_by?
-        queue_print_by
-      when save_to?
-        queue_save_to
+      when count?    then print_queue_count
+      when clear?    then queue_clear
+      when print?    then queue_print
+      when print_by? then queue_print_by
+      when save_to?  then queue_save_to
       end
     end
 
     def valid_criteria?
-      if criteria.length == 1 && $valid_commands.include?(criteria[0]) then true
-      elsif criteria.length == 3 && $valid_commands.include?(criteria[0..1].join(" ")) then true
-      else false
-      end
+      valid_single_criterion? || valid_multi_criterion?
+    end
+
+    def valid_single_criterion?
+      criteria.length == 1 && $valid_commands.include?(criteria[0])
+    end
+
+    def valid_multi_criterion?
+      criteria.length == 3 && $valid_commands.include?(criteria[0..1].join(" "))
     end
 
     def queue_count
@@ -54,13 +54,18 @@ module EventReporter
     end
 
     def queue_print
-      if queue_count == 0
-        printer.print_nothing_to_print
-      else
-        printer.print_queue_headers
-        $queue_repository.entries.each do |entry|
-          printer.print_queue_row(entry)
-        end
+      return printer.print_nothing_to_print if queue_count == 0
+      print_headers
+      print_rows
+    end
+
+    def print_headers
+      printer.print_queue_headers
+    end
+
+    def print_rows
+      $queue_repository.entries.each do |entry|
+        printer.print_queue_row(entry)
       end
     end
 
@@ -70,30 +75,34 @@ module EventReporter
     end
 
     def queue_sort
-      if $queue_repository.nil?
-        return
-      else
-        $queue_repository.entries = $queue_repository.entries.sort_by do |entry|
-          entry.send(criteria[2].to_sym).downcase
-        end
+      return if $queue_repository.nil?
+      sort_entries
+    end
+
+    def sort_entries
+      $queue_repository.entries = $queue_repository.entries.sort_by do |entry|
+        entry.send(criteria[2].to_sym).downcase
       end
     end
 
     def queue_save_to
-      if file_exists?
-        printer.confirm_file_overwrite(criteria[2])
-        printer.confirm_overwrite_prompt
-        confirmation = instream.gets.strip.downcase
-        if confirmation == "y"
-          create_csv
-          printer.confirm_file_saved(criteria[2])
-        else
-          printer.file_not_overwritten
-        end
-      else
+      file_exists? ? confirm_overwrite : create_csv
+    end
+
+    def confirm_overwrite
+      printer.confirm_file_overwrite(criteria[2])
+      printer.confirm_overwrite_prompt
+      response = instream.gets.strip.downcase
+      if confirmed?(response)
         create_csv
         printer.confirm_file_saved(criteria[2])
+      else
+        printer.file_not_overwritten
       end
+    end
+
+    def confirmed?(response)
+      response == "y" || response == "yes"
     end
 
     def create_csv
@@ -123,6 +132,7 @@ module EventReporter
           end
         end
       end
+      printer.confirm_file_saved(criteria[2])
     end
 
     def file_exists?
