@@ -47,5 +47,13 @@ module EventReporter
     def invalid_find_attribute(attribute)
       outstream.puts ">>> Invalid attribute: '#{attribute}' is not a valid search attribute"
     end
+
+    def print_number_found(number)
+      outstream.puts ">>> #{number} records added to queue"
+    end
+
+    def print_queue_count(records)
+      outstream.puts ">>> #{records} records in queue"
+    end
   end
 end

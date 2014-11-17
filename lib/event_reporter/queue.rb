@@ -20,7 +20,7 @@ module EventReporter
     def process_command
       case
       when count?
-        puts "counted"
+        print_queue_count
       when clear?
         puts "cleared"
       when print?
@@ -37,6 +37,15 @@ module EventReporter
       elsif criteria.length == 3 && $valid_commands.include?(criteria[0..1].join(" ")) then true
       else false
       end
+    end
+
+    def queue_count
+      $queue_repository.entries.length
+    end
+
+    def print_queue_count
+      count = $queue_repository.nil? ? 0 : queue_count
+      printer.print_queue_count(count)
     end
 
     def count?
