@@ -17,11 +17,15 @@ module EventReporter
     end
 
     def find_valid_entries
-      found = $entry_repository.entries.select do |entry|
-        entry.send(criteria[0].to_sym).downcase == criteria[1]
+      if $queue_repository.nil?
+        printer.print_number_found(0)
+      else
+        found = $entry_repository.entries.select do |entry|
+          entry.send(criteria[0].to_sym).downcase == criteria[1]
+        end
+        printer.print_number_found(found.length)
+        $queue_repository = EventReporter::QueueRepository.new(found)
       end
-      printer.print_number_found(found.length)
-      $queue_repository = EventReporter::QueueRepository.new(found)
     end
 
     def valid_criteria?

@@ -1,7 +1,8 @@
 module EventReporter
   class Queue
     attr_reader :criteria,
-                :printer
+                :printer,
+                :instream
 
     def initialize(instream, outstream, printer, criteria)
       @instream   = instream
@@ -28,7 +29,7 @@ module EventReporter
       when print_by?
         queue_print_by
       when save_to?
-        puts "saved to"
+        queue_save_to
       end
     end
 
@@ -69,9 +70,67 @@ module EventReporter
     end
 
     def queue_sort
-      $queue_repository.entries = $queue_repository.entries.sort_by do |entry|
-        entry.send(criteria[2].to_sym).downcase
+      if $queue_repository.nil?
+        return
+      else
+        $queue_repository.entries = $queue_repository.entries.sort_by do |entry|
+          entry.send(criteria[2].to_sym).downcase
+        end
       end
+    end
+
+    def queue_save_to
+      if file_exists?
+        printer.confirm_file_overwrite(criteria[2])
+        printer.confirm_overwrite_prompt
+        confirmation = instream.gets.strip.downcase
+        if confirmation == "y"
+          create_csv
+          printer.confirm_file_saved(criteria[2])
+        else
+          printer.file_not_overwritten
+        end
+      else
+        create_csv
+        printer.confirm_file_saved(criteria[2])
+      end
+    end
+
+    def create_csv
+      file = generate_file_path
+      CSV.open(file, "wb") do |csv|
+        csv << ["Last_Name",
+                "First_Name",
+                "Email_Address",
+                "Zipcode",
+                "City",
+                "State",
+                "Address",
+                "HomePhone"]
+
+        if $queue_repository.nil?
+          return
+        else
+          $queue_repository.entries.each do |entry|
+            csv << ["#{entry.last_name}",
+                    "#{entry.first_name}",
+                    "#{entry.email}",
+                    "#{entry.zipcode}",
+                    "#{entry.city}",
+                    "#{entry.state}",
+                    "#{entry.street}",
+                    "#{entry.phone}"]
+          end
+        end
+      end
+    end
+
+    def file_exists?
+      File.exist?(generate_file_path)
+    end
+
+    def generate_file_path
+      File.join(EventReporter::LOAD_FILE_DIR, criteria[2])
     end
 
     def count?

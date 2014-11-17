@@ -69,7 +69,24 @@ module EventReporter
     end
 
     def print_nothing_to_print
-      outstream.puts ">>>Nothing to print"
+      outstream.puts ">>> Nothing to print"
+    end
+
+    def confirm_file_saved(file_name)
+      outstream.puts ">>> '#{file_name}' saved to '/files' directory"
+    end
+
+    def confirm_file_overwrite(file_name)
+      outstream.puts ">>> '#{file_name}' already exists in '/files' directory"
+      outstream.puts ">>> Do you want to overwrite this file?"
+    end
+
+    def confirm_overwrite_prompt
+      outstream.print ">>> ENTER 'Y' to confirm: "
+    end
+
+    def file_not_overwritten
+      outstream.puts ">>> File not overwritten"
     end
   end
 end
