@@ -1,4 +1,6 @@
 
+/files/
+!/files/event_attendees.csv
 /.bundle/
 /.yardoc
 /Gemfile.lock
