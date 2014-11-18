@@ -88,5 +88,90 @@ module EventReporter
     def file_not_overwritten
       outstream.puts ">>> File not overwritten"
     end
+
+    def invalid_help_queue_command(command)
+      outstream.puts ">>> Invalid help criteria: You entered 'help #{command}' which is not valid command"
+    end
+
+    def print_help_intro(criteria)
+      outstream.puts ">>> HELP: #{criteria.upcase}"
+    end
+    def print_help_commands
+      outstream.puts ">>> ALL COMMANDS:"
+    end
+
+    def help
+      print_help_commands
+      print_queue_clear_help_content
+      print_help_queue_count_content
+      print_queue_print_help_content
+      queue_print_by_help_content
+      queue_save_to_content
+    end
+
+    def queue_clear_help(criteria)
+      print_help_intro(criteria)
+      print_queue_clear_help_content
+    end
+
+    def print_queue_clear_help_content
+      outstream.puts ">>> Enter 'queue clear' to clear the queue"
+    end
+
+    def queue_count_help(criteria)
+      print_help_intro(criteria)
+      print_help_queue_count_content
+    end
+
+    def print_help_queue_count_content
+      outstream.puts ">>> Enter 'queue count' to count the queue"
+    end
+
+    def queue_print_help(criteria)
+      print_help_intro(criteria)
+      print_queue_print_help_content
+
+    end
+
+    def print_queue_print_help_content
+      outstream.puts ">>> Enter 'queue print' to print the queue"
+    end
+
+    def queue_print_by_help(criteria)
+      print_help_intro(criteria)
+      queue_print_by_help_content
+    end
+
+    def queue_print_by_help_content
+      outstream.puts ">>> Enter 'queue print by' to print by attribute"
+    end
+
+    def queue_save_to_help(criteria)
+      print_help_intro(criteria)
+      queue_save_to_content
+    end
+
+    def queue_save_to_content
+      outstream.puts ">>> Enter 'queue save to' to save to a file in the files directory"
+    end
+
+    def find_help(criteria)
+      print_help_intro(criteria)
+      load_find_content
+    end
+
+    def load_help(criteria)
+      print_help_intro(criteria)
+      load_help_content
+    end
+
+    def load_help_content
+      outstream.puts ">>> Enter 'load' and a filename from files directory to load file\n"
+      outstream.puts ">>> Load with no filename loads the default file event_attendees.csv"
+    end
+
+    def load_find_content
+      outstream.puts ">>> Enter 'find' to find an attribute"
+    end
   end
 end

@@ -37,7 +37,7 @@ module EventReporter
     end
 
     def valid_multi_criterion?
-      criteria.length == 3 && @@valid_commands.include?(criteria[0..1].join(" "))
+        criteria.length == 3 && @@valid_commands.include?(criteria[0..1].join(" "))
     end
 
     def queue_count
