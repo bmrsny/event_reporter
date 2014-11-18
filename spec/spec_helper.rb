@@ -1,5 +1,5 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start { add_filter "/spec/" }
 require 'event_reporter'
 require 'event_reporter/load'
 require 'event_reporter/printer'
