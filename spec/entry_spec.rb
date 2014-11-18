@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe EventReporter::Entry do
-  it 'creates a new entry object when given a valid hash'
+  it 'creates a new entry object when given a valid hash' do
+    data = {:_=>"99", :regdate=>"12/8/08 21:24", :first_name=>"Maia", :last_name=>"Allen", :email_address=>"gqckerj@jumpstartlab.com", :homephone=>"(913) 963-7000", :street=>"1541 Kentucky St.", :city=>"Lawrence", :state=>"KS", :zipcode=>"66044"}
+    entry = EventReporter::Entry.new(data)
+    expect(entry).to be_a EventReporter::Entry
+  end
 
   context 'when loading names' do
     before do
