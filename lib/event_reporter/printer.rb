@@ -88,5 +88,39 @@ module EventReporter
     def file_not_overwritten
       outstream.puts ">>> File not overwritten"
     end
+
+    def invalid_help_queue_command(command)
+      outstream.puts ">>> Invalid help criteria: You entered 'help #{command}' which is not valid command"
+    end
+
+    def print_help_intro(criteria)
+      outstream.puts ">>> HELP: #{criteria.upcase}"
+    end
+
+    def print_queue_clear_help(criteria)
+      print_help_intro(criteria)
+      print_queue_clear_help_content
+    end
+
+    def print_queue_clear_help_content
+      outstream.puts ">>> Enter 'queue clear' to clear the queue"
+    end
+
+
+
+    # def print_help
+    #   print_help_main_intro
+    #   print_queue_clear_help_content
+    #   print_queue_count_help
+    # end
+    #
+    # def print_queue_count_help(criteria)
+    #   print_help_intro(criteria)
+    # end
+    #
+    #
+    # def print_help_main_intro
+    #   outstream.puts ">>> HELP: ALL COMMANDS"
+    # end
   end
 end

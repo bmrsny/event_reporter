@@ -7,6 +7,7 @@ require 'event_reporter/entry'
 require 'event_reporter/queue'
 require 'event_reporter/find'
 require 'event_reporter/queue_repository'
+require 'event_reporter/help'
 
 module EventReporter
   LOAD_FILE_DIR = '././files/'
