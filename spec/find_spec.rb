@@ -32,7 +32,7 @@ RSpec.describe EventReporter::Find do
 
     it "return an error message for an invalid param" do
       @finder.criteria = ["invalid_attribute", "Steve"]
-      @finder.call
+      @finder.call 
       expect(@outstream.string).to include("Invalid attribute:")
     end
   end

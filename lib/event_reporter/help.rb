@@ -1,7 +1,7 @@
 module EventReporter
   class Help
-    attr_reader :printer,
-                :criteria
+    attr_reader   :printer
+    attr_accessor :criteria
     def initialize(instream, outstream, printer, criteria)
       @instream  = instream
       @outstream = outstream
