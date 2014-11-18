@@ -28,21 +28,46 @@ RSpec.describe EventReporter::Load do
     end
 
     it "returns error if the file does not exist in files dir" do
-      @loader.criteria = ["x.csv"]
+      @loader.criteria = ["dskgjslasd.csv"]
       @loader.call
       expect(@outstream.string).to include("does not exist")
+    end
+
+    it "generates a load path" do
+      @loader.criteria = ["x.csv"]
+      @loader.get_filename
+      path = @loader.generate_file_path
+      expect(path).to eql('././files/x.csv')
     end
   end
 
   context "when loading a file" do
-    it "generates a load path"
+    before do
+      instream = StringIO.new
+      @outstream = StringIO.new
+      printer = EventReporter::Printer.new(@outstream)
+      criteria = []
+      @loader = EventReporter::Load.new(instream, @outstream, printer, criteria)
+    end
 
-    it "checks if a file exists"
+    it "reads in a csv file" do
+      @loader.file_name = ['event_attendees.csv']
+      path = @loader.generate_file_path
+      opened_csv = @loader.read_in_csv(path)
+      expect(opened_csv).to be_a CSV
+    end
 
-    it "reads in a csv file"
+    it "converts csv row objects to hashes" do
+      @loader.file_name = ['event_attendees.csv']
+      path = @loader.generate_file_path
+      opened_csv = @loader.read_in_csv(path)
+      hashes = @loader.csv_to_hash(opened_csv)
+      expect(hashes[0]).to be_a Hash
+    end
 
-    it "converts csv row objects to hashes"
-
-    it "creates a new EntryRepository object"
+    it "creates a new EntryRepository object" do
+      @loader.call
+      expect($entry_repository).to be_a EventReporter::EntryRepository
+    end
   end
 end
