@@ -23,7 +23,7 @@ module EventReporter
     end
 
     def name_cleaner(name)
-      name
+      name.split(" ").map(&:capitalize).join(' ')
     end
 
     def zipcode_cleaner(zipcode)
