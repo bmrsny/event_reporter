@@ -1,7 +1,7 @@
 module EventReporter
   class Find
-    attr_reader :criteria,
-                :printer
+    attr_accessor :criteria
+    attr_reader :printer
 
     def initialize(instream, outstream, printer, criteria)
       @instream   = instream
