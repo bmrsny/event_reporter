@@ -8,13 +8,13 @@ RSpec.describe EventReporter::Entry do
       data = {:_=>"99", :regdate=>"12/8/08 21:24", :first_name=>"Maia", :last_name=>"Allen", :email_address=>"gqckerj@jumpstartlab.com", :homephone=>"(913) 963-7000", :street=>"1541 Kentucky St.", :city=>"Lawrence", :state=>"KS", :zipcode=>"66044"}
       @entry = EventReporter::Entry.new(data)
     end
-    xit 'makes the first letter capitalized' do
+    it 'makes the first letter capitalized' do
       name = "will"
       expect(@entry.name_cleaner(name)).to eq("Will")
     end
 
-    xit 'capitalizes a double first name' do
-      name = "Tannis Ruth"
+    it 'capitalizes a double first name' do
+      name = "tannis ruth"
       expect(@entry.name_cleaner(name)).to eq("Tannis Ruth")
     end
   end
@@ -60,6 +60,24 @@ RSpec.describe EventReporter::Entry do
     it 'removes invalid characters and formats phone number when 11 digits' do
       phone = "1.303.544-9222"
       expect(@entry.phone_cleaner(phone)).to eq("13035449222")
+    end
+  end
+
+  context 'when checking for an empty attribute' do
+    before do
+      data = {:_=>"99", :regdate=>"12/8/08 21:24", :first_name=>"Maia", :last_name=>"Allen", :email_address=>"gqckerj@jumpstartlab.com", :homephone=>"(913) 963-7000", :street=> nil, :city=>"", :state=>"KS", :zipcode=>"66044"}
+      @entry = EventReporter::Entry.new(data)
+    end
+    it 'returns a not provided message when street is nil' do
+      expect(@entry.street).to eq("No address provided")
+    end
+
+    it 'returns a not provided message when city is blank' do
+      expect(@entry.city).to eq("No city provided")
+    end
+
+    it 'acuaratley returns the state when provided' do
+      expect(@entry.state).to eq("KS")
     end
   end
 end
