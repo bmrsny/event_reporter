@@ -17,12 +17,14 @@ module EventReporter
 
     def process_command
        case
-       when help?            then puts "Help instructions"
-       when queue_count?     then puts "queue counted"#print_queue_count_help
-       when queue_clear?     then printer.print_queue_clear_help(criteria[0..-1].join(" "))
-       when queue_print?     then puts "queue printed"#print_queue_print_help
-       when queue_print_by?  then puts "Printed By Message"
-       when queue_save_to?   then puts "SAVED TOOOOO"
+       when help?            then printer.help
+       when queue_count?     then printer.queue_count_help(help_command)
+       when queue_clear?     then printer.queue_clear_help(help_command)
+       when queue_print?     then printer.queue_print_help(help_command)
+       when queue_print_by?  then printer.queue_print_by_help(help_command)
+       when queue_save_to?   then printer.queue_save_to_help(help_command)
+       when find?            then printer.find_help(help_command)
+       when load?            then printer.load_help(help_command)
        end
 
     end
@@ -39,28 +41,40 @@ module EventReporter
       @@valid_commands.include?(criteria[0..-1].join(" "))
     end
 
+    def help_command
+      criteria[0..-1].join(" ")
+    end
+
     def queue_count?
-      criteria[0..-1].join(" ") == 'queue count'
+      help_command == 'queue count'
     end
 
     def queue_clear?
-      criteria[0..-1].join(" ") == 'queue clear'
+      help_command == 'queue clear'
     end
 
     def queue_print?
-      criteria[0..-1].join(" ") == 'queue print'
+      help_command == 'queue print'
     end
 
     def queue_print_by?
-      criteria[0..-1].join(" ") == 'queue print by'
+      help_command == 'queue print by'
     end
 
     def queue_save_to?
-      criteria[0..-1].join(" ") == 'queue save to'
+      help_command == 'queue save to'
     end
 
     def help?
-      criteria[0] == nil
+      criteria[0]  == nil
+    end
+
+    def find?
+      help_command == 'find'
+    end
+
+    def load?
+      help_command == 'load'
     end
   end
 end
