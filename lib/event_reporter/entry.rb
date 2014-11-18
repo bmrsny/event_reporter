@@ -1,7 +1,6 @@
 module EventReporter
   class Entry
-    attr_reader :id,
-                :reg_date,
+    attr_reader :reg_date,
                 :first_name,
                 :last_name,
                 :email,
@@ -12,7 +11,6 @@ module EventReporter
                 :zipcode
 
     def initialize(data)
-      @id         = data[:_]
       @reg_date   = data[:regdate]
       @first_name = name_cleaner(data[:first_name])
       @last_name  = name_cleaner(data[:last_name])

@@ -114,14 +114,15 @@ module EventReporter
     end
 
     def csv_col_headers
-      ["Last_Name",
-       "First_Name",
-       "Email_Address",
+      ["Last Name",
+       "First Name",
+       "Email Address",
        "Zipcode",
        "City",
        "State",
        "Address",
-       "HomePhone"]
+       "Homephone",
+       "Regdate"]
     end
 
     def add_csv_rows(csv)
@@ -133,7 +134,8 @@ module EventReporter
                 "#{entry.city}",
                 "#{entry.state}",
                 "#{entry.street}",
-                "#{entry.phone}"]
+                "#{entry.phone}",
+                "#{entry.reg_date}"]
       end
     end
 
