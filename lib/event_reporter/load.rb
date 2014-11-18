@@ -24,7 +24,7 @@ module EventReporter
     def load_file
       file_path          = generate_file_path
       contents           = read_in_csv(file_path)
-      csv_rows           = contents.map { |row| row.to_hash }
+      csv_rows           = csv_to_hash(contents)
       $entry_repository  = EventReporter::EntryRepository.new(csv_rows)
       confirm_load
     end
@@ -47,6 +47,10 @@ module EventReporter
 
     def read_in_csv(file_path)
       CSV.open file_path, headers: true, header_converters: :symbol
+    end
+
+    def csv_to_hash(csv_rows)
+      csv_rows.map(&:to_hash)
     end
 
     def confirm_load
