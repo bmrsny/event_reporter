@@ -9,6 +9,7 @@ module EventReporter
       @command   = ''
       @criteria  = []
       @printer   = EventReporter::Printer.new(outstream)
+      $entry_repository = nil
       $queue_repository = nil
     end
 
