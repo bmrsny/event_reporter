@@ -1,14 +1,17 @@
 module EventReporter
   class Queue
-    attr_reader :criteria,
-                :printer,
-                :instream
+    attr_reader   :printer,
+                  :instream,
+                  :outstream
+    attr_accessor :queue,
+                  :criteria
 
     def initialize(instream, outstream, printer, criteria)
       @instream   = instream
       @outstream  = outstream
       @printer    = printer
       @criteria   = criteria
+      @queue      = $queue_repository
     end
 
     @@valid_commands = ["count", "clear", "print", "print by", "save to"]
@@ -41,7 +44,7 @@ module EventReporter
     end
 
     def queue_count
-      $queue_repository.nil? ? 0 : $queue_repository.entries.length
+      queue.nil? ? 0 : queue.entries.length
     end
 
     def print_queue_count
@@ -49,7 +52,7 @@ module EventReporter
     end
 
     def queue_clear
-      $queue_repository = nil
+      self.queue = nil
       printer.print_queue_cleared(queue_count)
     end
 
@@ -64,7 +67,7 @@ module EventReporter
     end
 
     def print_rows
-      $queue_repository.entries.each do |entry|
+      queue.entries.each do |entry|
         printer.print_queue_row(entry)
       end
     end
@@ -75,76 +78,18 @@ module EventReporter
     end
 
     def queue_sort
-      return if $queue_repository.nil?
+      return if queue.nil?
       sort_entries
     end
 
     def sort_entries
-      $queue_repository.entries = $queue_repository.entries.sort_by do |entry|
+      queue.entries = queue.entries.sort_by do |entry|
         entry.send(criteria[2].to_sym).downcase
       end
     end
 
     def queue_save_to
-      file_exists? ? confirm_overwrite : create_csv
-    end
-
-    def confirm_overwrite
-      response = confirm_prompt
-      confirmed?(response) ? create_csv : printer.file_not_overwritten
-    end
-
-    def confirm_prompt
-      printer.confirm_file_overwrite(criteria[2])
-      printer.confirm_overwrite_prompt
-      instream.gets.strip.downcase
-    end
-
-    def confirmed?(response)
-      response == "y" || response == "yes"
-    end
-
-    def create_csv
-      file = generate_file_path
-      CSV.open(file, "wb") do |csv|
-        csv << csv_col_headers
-        add_csv_rows(csv) unless $queue_repository.nil?
-      end
-      printer.confirm_file_saved(criteria[2])
-    end
-
-    def csv_col_headers
-      ["Last Name",
-       "First Name",
-       "Email Address",
-       "Zipcode",
-       "City",
-       "State",
-       "Address",
-       "Homephone",
-       "Regdate"]
-    end
-
-    def add_csv_rows(csv)
-      $queue_repository.entries.each do |entry|
-        csv << ["#{entry.last_name}",
-                "#{entry.first_name}",
-                "#{entry.email}",
-                "#{entry.zipcode}",
-                "#{entry.city}",
-                "#{entry.state}",
-                "#{entry.street}",
-                "#{entry.phone}",
-                "#{entry.reg_date}"]
-      end
-    end
-
-    def file_exists?
-      File.exist?(generate_file_path)
-    end
-
-    def generate_file_path
-      File.join(EventReporter::LOAD_FILE_DIR, criteria[2])
+      EventReporter::CSVGenerator.new(instream, outstream, printer, criteria, queue).call
     end
 
     def count?
