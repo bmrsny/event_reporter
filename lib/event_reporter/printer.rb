@@ -8,7 +8,7 @@ module EventReporter
 
     def invalid_command
       outstream.puts
-      outstream.puts ">>> Invalid Command"
+      outstream.puts ">>> Invalid Command: Type 'help' for more information on commands"
       outstream.puts
     end
 
@@ -31,7 +31,9 @@ module EventReporter
     end
 
     def outro_message
+      outstream.puts
       outstream.puts "Goodbye"
+      outstream.puts
     end
 
     def invalid_load_criteria(criteria_length)
@@ -157,6 +159,16 @@ module EventReporter
       outstream.puts
     end
 
+    def queue_help(criteria)
+      print_help_intro(criteria)
+      print_queue_clear_help_content
+      print_help_queue_count_content
+      print_queue_print_help_content
+      queue_print_by_help_content
+      queue_save_to_content
+      outstream.puts
+    end
+
     def queue_clear_help(criteria)
       print_help_intro(criteria)
       print_queue_clear_help_content
@@ -194,7 +206,7 @@ module EventReporter
     end
 
     def queue_print_by_help_content
-      outstream.puts ">>> Enter 'queue print by' to print by attribute"
+      outstream.puts ">>> Enter 'queue print by <attribute>' to print by attribute"
     end
 
     def queue_save_to_help(criteria)
@@ -204,7 +216,7 @@ module EventReporter
     end
 
     def queue_save_to_content
-      outstream.puts ">>> Enter 'queue save to' to save to a file in the files directory"
+      outstream.puts ">>> Enter 'queue save to <file_name>' to save to a file in the '/files' directory"
     end
 
     def find_help(criteria)
@@ -220,12 +232,12 @@ module EventReporter
     end
 
     def load_help_content
-      outstream.puts ">>> Enter 'load' and a filename from files directory to load file\n"
+      outstream.puts ">>> Enter 'load <file name>' and a filename from 'files directory' to load file\n"
       outstream.puts ">>> Load with no filename loads the default file event_attendees.csv"
     end
 
     def load_find_content
-      outstream.puts ">>> Enter 'find' to find an attribute"
+      outstream.puts ">>> Enter 'find <attribute> <criteria>' to populate the queue based on the entered attribute"
     end
   end
 end
