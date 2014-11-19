@@ -60,14 +60,6 @@ module EventReporter
       outstream.puts ">>> Queue now has #{records} records"
     end
 
-    def print_queue_headers
-      outstream.puts "LAST NAME\t\tFIRST NAME\t\tEMAIL\t\tZIPCODE\t\tCITY\t\tSTATE\t\tADDRESS\t\t\PHONE"
-    end
-
-    def print_queue_row(entry)
-      outstream.puts "#{entry.last_name}\t#{entry.first_name}\t#{entry.email}\t#{entry.zipcode}\t#{entry.city}\t#{entry.state}\t#{entry.street}\t#{entry.phone}"
-    end
-
     def print_nothing_to_print
       outstream.puts ">>> Nothing to print"
     end

@@ -35,7 +35,7 @@ module EventReporter
       if clean_number.length == 10 || clean_number.length == 11
         clean_number
       else
-        "No valid phone number"
+        "Not Provided"
       end
     end
 

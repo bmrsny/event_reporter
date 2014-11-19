@@ -2,16 +2,18 @@ module EventReporter
   class Queue
     attr_reader   :printer,
                   :instream,
-                  :outstream
+                  :outstream,
+                  :table_printer
     attr_accessor :queue,
                   :criteria
 
     def initialize(instream, outstream, printer, criteria)
-      @instream   = instream
-      @outstream  = outstream
-      @printer    = printer
-      @criteria   = criteria
-      @queue      = $queue_repository
+      @instream      = instream
+      @outstream     = outstream
+      @printer       = printer
+      @table_printer = EventReporter::TablePrinter.new(instream, outstream, queue)
+      @criteria      = criteria
+      @queue         = $queue_repository
     end
 
     @@valid_commands = ["count", "clear", "print", "print by", "save to"]
@@ -58,18 +60,7 @@ module EventReporter
 
     def queue_print
       return printer.print_nothing_to_print if queue_count == 0
-      print_headers
-      print_rows
-    end
-
-    def print_headers
-      printer.print_queue_headers
-    end
-
-    def print_rows
-      queue.entries.each do |entry|
-        printer.print_queue_row(entry)
-      end
+      table_printer.call
     end
 
     def queue_print_by
