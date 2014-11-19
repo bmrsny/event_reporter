@@ -49,21 +49,23 @@ RSpec.describe EventReporter::Find do
     end
 
     it "can find matching entries" do
-      search_criteria = "genna"
-      found = @finder.get_matching_entries(search_criteria)
+      first_criteria = "genna"
+      second_criteria = nil
+      found = @finder.get_matching_entries(first_criteria, second_criteria)
       expect(found.length).to eql(1)
     end
 
     it "finds nothing if no matches" do
-      search_criteria = "steve"
-      found = @finder.get_matching_entries(search_criteria)
+      first_criteria = "steve"
+      second_criteria = nil
+      found = @finder.get_matching_entries(first_criteria, second_criteria)
       expect(found.length).to eql(0)
     end
 
     it "can search for a multi-word string" do
       #@finder.criteria = ["city", "salt", "lake", "city"]
       @finder.criteria = ["city", ""]
-      found = @finder.get_matching_entries("salt lake city")
+      found = @finder.get_matching_entries("salt lake city", nil)
       expect(found.length).to eql(1)
     end
 
