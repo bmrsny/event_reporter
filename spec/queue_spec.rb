@@ -65,14 +65,9 @@ RSpec.describe EventReporter::Queue do
       expect(@queuer.queue_count).to eql(0)
     end
 
-    xit "can call the csv generator class" do
-      generator = double(EventReporter::CSVGenerator.new(StringIO.new, StringIO.new, @printer, @criteria, $queue_repository))
-      require 'pry'
-      binding.pry
-      expect(generator).to receive(:call).and_return("hello pizza")
-      generator.stub(:call)
-      queuer.queue_save_to
+    it "can call the csv generator class" do
       expect_any_instance_of(EventReporter::CSVGenerator).to receive(:call)
+      @queuer.queue_save_to
     end
   end
 end

@@ -11,9 +11,8 @@ module EventReporter
       @instream      = instream
       @outstream     = outstream
       @printer       = printer
-      @table_printer = EventReporter::TablePrinter.new(instream, outstream, queue)
+      @table_printer = EventReporter::TablePrinter.new(instream, outstream, $queue_repository)
       @criteria      = criteria
-      @queue         = $queue_repository
     end
 
     @@valid_commands = ["count", "clear", "print", "print by", "save to"]
@@ -46,7 +45,7 @@ module EventReporter
     end
 
     def queue_count
-      queue.nil? ? 0 : queue.entries.length
+      $queue_repository.nil? ? 0 : $queue_repository.entries.length
     end
 
     def print_queue_count
@@ -54,7 +53,7 @@ module EventReporter
     end
 
     def queue_clear
-      self.queue = nil
+      $queue_repository = nil
       printer.print_queue_cleared(queue_count)
     end
 
@@ -69,18 +68,18 @@ module EventReporter
     end
 
     def queue_sort
-      return if queue.nil?
+      return if $queue_repository.nil?
       sort_entries
     end
 
     def sort_entries
-      queue.entries = queue.entries.sort_by do |entry|
+      $queue_repository.entries = $queue_repository.entries.sort_by do |entry|
         entry.send(criteria[2].to_sym).downcase
       end
     end
 
     def queue_save_to
-      EventReporter::CSVGenerator.new(instream, outstream, printer, criteria, queue).call
+      EventReporter::CSVGenerator.new(instream, outstream, printer, criteria, $queue_repository).call
     end
 
     def count?
