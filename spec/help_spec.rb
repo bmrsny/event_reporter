@@ -35,8 +35,8 @@ RSpec.describe EventReporter::Help do
   end
 
   it "returns a valid message when inputing valid criteria" do
-    @helper.criteria = ["queue","print", "by"]
+    @helper.criteria = ["queue", "print", "by"]
     @helper.call
-    expect(@outstream.string).to include("Enter 'queue print by'")
+    expect(@outstream.string).to include("Enter 'queue print by")
   end
 end

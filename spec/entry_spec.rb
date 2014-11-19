@@ -50,7 +50,7 @@ RSpec.describe EventReporter::Entry do
     end
     it 'returns invalid if phone number is not 10 digits' do
       phone = "###-#33-3564"
-      expect(@entry.phone_cleaner(phone)).to eq("No valid phone number")
+      expect(@entry.phone_cleaner(phone)).to eq("Not Provided")
     end
 
     it 'removes non digit characters from phone number' do

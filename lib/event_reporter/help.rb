@@ -8,7 +8,7 @@ module EventReporter
       @printer   = printer
       @criteria  = criteria
     end
-    @@valid_commands = [ "", "queue count", "queue clear", "queue print", "queue print by", "queue save to", "find", "load"]
+    @@valid_commands = [ "", "queue", "queue count", "queue clear", "queue print", "queue print by", "queue save to", "find", "load"]
 
     def call
       return printer.invalid_help_queue_command(criteria.join(" ")) if !valid_criteria?
@@ -18,6 +18,7 @@ module EventReporter
     def process_command
        case
        when help?            then printer.help
+       when queue?           then printer.queue_help(help_command)
        when queue_count?     then printer.queue_count_help(help_command)
        when queue_clear?     then printer.queue_clear_help(help_command)
        when queue_print?     then printer.queue_print_help(help_command)
@@ -43,6 +44,10 @@ module EventReporter
 
     def help_command
       criteria[0..-1].join(" ")
+    end
+
+    def queue?
+      help_command == 'queue'
     end
 
     def queue_count?

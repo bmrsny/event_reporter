@@ -24,21 +24,35 @@ module EventReporter
       criteria.length >= 2
     end
 
+    def find_and_index
+      criteria.include?("and") ? criteria.index("and") : 0
+    end
+
     def valid_attribute?
       valid_attributes = EventReporter::Entry.instance_methods(false).grep(/^((?!cleaner).)*$/)
-      valid_attributes.include?(criteria[0].to_sym)
+      if criteria.include?("and")
+        valid_attributes.include?(criteria[0].to_sym) && valid_attributes.include?(criteria[find_and_index + 1].to_sym)
+      else
+        valid_attributes.include?(criteria[0].to_sym)
+      end
     end
 
     def find_entries
-      search_criteria = criteria[1..-1].join(" ")
-      found = get_matching_entries(search_criteria)
+      first_criteria = criteria[1..(find_and_index - 1)].join(" ")
+      second_criteria = criteria[(find_and_index + 2)..-1].join(" ") if criteria.include?("and")
+      found = get_matching_entries(first_criteria, second_criteria)
       print_found(found.length)
       populate_queue(found)
     end
 
-    def get_matching_entries(search_criteria)
+    def get_matching_entries(first_criteria, second_criteria)
       $entry_repository.entries.select do |entry|
-        entry.send(criteria[0].to_sym).downcase == search_criteria
+        if criteria.include?("and")
+          entry.send(criteria[0].to_sym).downcase == first_criteria &&
+          entry.send(criteria[find_and_index + 1]).downcase == second_criteria
+        else
+          entry.send(criteria[0].to_sym).downcase == first_criteria
+        end
       end
     end
 
