@@ -8,7 +8,7 @@ module EventReporter
     def initialize(instream, outstream, queue)
       @instream   = instream
       @outstream  = outstream
-      @queue      = $queue_repository
+      @queue      = queue
       @col_widths = Hash.new
       @col_names  = {
           :last_name  => "LAST NAME",
@@ -35,7 +35,7 @@ module EventReporter
     end
 
     def print_rows
-      temp_queue = $queue_repository.entries.dup
+      temp_queue = queue.entries.dup
       until temp_queue.entries.empty?
         self.round_max = 0
         10.times do

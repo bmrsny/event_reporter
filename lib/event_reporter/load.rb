@@ -4,7 +4,8 @@ module EventReporter
   class Load
     attr_reader   :printer
     attr_accessor :file_name,
-                  :criteria
+                  :criteria,
+                  :entry_repository
 
     def initialize(instream, outstream, printer, criteria)
       @instream   = instream
@@ -12,6 +13,7 @@ module EventReporter
       @printer    = printer
       @criteria   = criteria
       @file_name  = 'event_attendees.csv'
+      @entry_repository = nil
     end
 
     def call
@@ -22,11 +24,12 @@ module EventReporter
     end
 
     def load_file
-      file_path          = generate_file_path
-      contents           = read_in_csv(file_path)
-      csv_rows           = csv_to_hash(contents)
-      $entry_repository  = EventReporter::EntryRepository.new(csv_rows)
+      file_path             = generate_file_path
+      contents              = read_in_csv(file_path)
+      csv_rows              = csv_to_hash(contents)
+      self.entry_repository = EventReporter::EntryRepository.new(csv_rows)
       confirm_load
+      entry_repository
     end
 
     def get_filename
@@ -54,7 +57,7 @@ module EventReporter
     end
 
     def confirm_load
-      printer.confirm_file_load($entry_repository.entries.length)
+      printer.confirm_file_load(entry_repository.entries.length)
     end
 
     def no_criteria?

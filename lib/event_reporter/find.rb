@@ -1,13 +1,14 @@
 module EventReporter
   class Find
     attr_accessor :criteria
-    attr_reader :printer
+    attr_reader :printer, :entry_repository
 
-    def initialize(instream, outstream, printer, criteria)
+    def initialize(instream, outstream, printer, criteria, entry_repository)
       @instream   = instream
       @outstream  = outstream
       @printer    = printer
       @criteria   = criteria
+      @entry_repository = entry_repository
     end
 
     def call
@@ -17,7 +18,7 @@ module EventReporter
     end
 
     def find_valid_entries
-      $entry_repository.nil? ? print_found(0) : find_entries
+      entry_repository.nil? ? print_found(0) : find_entries
     end
 
     def valid_criteria?
@@ -46,7 +47,7 @@ module EventReporter
     end
 
     def get_matching_entries(first_criteria, second_criteria)
-      $entry_repository.entries.select do |entry|
+      entry_repository.entries.select do |entry|
         if criteria.include?("and")
           entry.send(criteria[0].to_sym).downcase == first_criteria &&
           entry.send(criteria[find_and_index + 1]).downcase == second_criteria
@@ -61,7 +62,7 @@ module EventReporter
     end
 
     def populate_queue(found)
-      $queue_repository = EventReporter::QueueRepository.new(found)
+      EventReporter::QueueRepository.new(found)
     end
   end
 end

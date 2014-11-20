@@ -1,7 +1,7 @@
 module EventReporter
   class CLI
     attr_reader :printer
-    attr_accessor :command, :instream, :outstream, :criteria
+    attr_accessor :command, :instream, :outstream, :criteria, :entry_repository, :queue_repository
 
     def initialize(instream, outstream)
       @instream  = instream
@@ -9,8 +9,8 @@ module EventReporter
       @command   = ''
       @criteria  = []
       @printer   = EventReporter::Printer.new(outstream)
-      $entry_repository = nil
-      $queue_repository = nil
+      @entry_repository = nil
+      @queue_repository = nil
     end
 
     def call
@@ -24,12 +24,15 @@ module EventReporter
 
     def process_command
       case
-      when load?     then EventReporter::Load.new(instream, outstream, printer, criteria).call
-      when find?     then EventReporter::Find.new(instream, outstream, printer, criteria).call
-      when queue?    then EventReporter::Queue.new(instream, outstream, printer, criteria).call
+      when load?
+        @entry_repository = EventReporter::Load.new(instream, outstream, printer, criteria).call
+      when find?
+        @queue_repository = EventReporter::Find.new(instream, outstream, printer, criteria, entry_repository).call
+      when queue?
+        EventReporter::Queue.new(instream, outstream, printer, criteria, queue_repository).call
       when help?     then EventReporter::Help.new(instream, outstream, printer, criteria).call
-      when add?      then EventReporter::Add.new(instream, outstream, printer, criteria).call
-      when subtract? then EventReporter::Subtract.new(instream, outstream, printer, criteria).call
+      when add?      then EventReporter::Add.new(instream, outstream, printer, criteria, queue_repository).call
+      when subtract? then EventReporter::Subtract.new(instream, outstream, printer, criteria, queue_repository).call
       when quit?
       else                printer.invalid_command
       end

@@ -2,12 +2,14 @@ module EventReporter
   class Help
     attr_reader   :printer
     attr_accessor :criteria
+
     def initialize(instream, outstream, printer, criteria)
       @instream  = instream
       @outstream = outstream
       @printer   = printer
       @criteria  = criteria
     end
+
     @@valid_commands = [ "", "queue", "queue count", "queue clear", "queue print", "queue print by", "queue save to", "find", "load"]
 
     def call
@@ -27,7 +29,6 @@ module EventReporter
        when find?            then printer.find_help(help_command)
        when load?            then printer.load_help(help_command)
        end
-
     end
 
     def valid_criteria?

@@ -1,13 +1,14 @@
 module EventReporter
   class Subtract < Find
-    attr_accessor :criteria
+    attr_accessor :criteria, :queue_repository
     attr_reader :printer
 
-    def initialize(instream, outstream, printer, criteria)
+    def initialize(instream, outstream, printer, criteria, queue_repository)
       @instream   = instream
       @outstream  = outstream
       @printer    = printer
       @criteria   = criteria
+      @queue_repository = queue_repository
     end
 
     def call
@@ -18,20 +19,20 @@ module EventReporter
     end
 
     def no_queue?
-      $queue_repository.nil?
+      queue_repository.nil?
     end
 
     def remove_valid_entries
       first_criteria = criteria[1..(find_and_index - 1)].join(" ")
       second_criteria = criteria[(find_and_index + 2)..-1].join(" ") if criteria.include?("and")
       new_queue = remove_entries(first_criteria, second_criteria)
-      num_removed = $queue_repository.entries.length - new_queue.length
+      num_removed = queue_repository.entries.length - new_queue.length
       print_removed(num_removed)
       populate_queue(new_queue)
     end
 
     def remove_entries(first_criteria, second_criteria)
-      $queue_repository.entries.reject do |entry|
+      queue_repository.entries.reject do |entry|
         if criteria.include?("and")
           entry.send(criteria[0].to_sym).downcase == first_criteria &&
           entry.send(criteria[find_and_index + 1]).downcase == second_criteria
@@ -46,7 +47,7 @@ module EventReporter
     end
 
     def populate_queue(new_queue)
-      $queue_repository = EventReporter::QueueRepository.new(new_queue)
+      self.queue_repository = EventReporter::QueueRepository.new(new_queue)
     end
   end
 end

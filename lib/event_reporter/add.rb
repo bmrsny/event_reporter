@@ -1,13 +1,14 @@
 module EventReporter
   class Add < Find
-    attr_accessor :criteria
+    attr_accessor :criteria, :queue_repository
     attr_reader :printer
 
-    def initialize(instream, outstream, printer, criteria)
+    def initialize(instream, outstream, printer, criteria, queue_repository)
       @instream   = instream
       @outstream  = outstream
       @printer    = printer
       @criteria   = criteria
+      @queue_repository = queue_repository
     end
 
     def call
@@ -18,11 +19,11 @@ module EventReporter
     end
 
     def no_queue?
-      $queue_repository.nil?
+      queue_repository.nil?
     end
 
     def populate_queue(found)
-      $queue_repository.entries.push(*found)
+      queue_repository.entries.push(*found)
     end
   end
 end

@@ -16,7 +16,4 @@ require 'io/console'
 
 module EventReporter
   LOAD_FILE_DIR = '././files/'
-
-  $entry_repository = nil
-  $queue_repository = nil
 end
