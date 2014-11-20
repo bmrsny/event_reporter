@@ -24,12 +24,14 @@ module EventReporter
 
     def process_command
       case
-      when load?  then EventReporter::Load.new(instream, outstream, printer, criteria).call
-      when find?  then EventReporter::Find.new(instream, outstream, printer, criteria).call
-      when queue? then EventReporter::Queue.new(instream, outstream, printer, criteria).call
-      when help?  then EventReporter::Help.new(instream, outstream, printer, criteria).call
+      when load?     then EventReporter::Load.new(instream, outstream, printer, criteria).call
+      when find?     then EventReporter::Find.new(instream, outstream, printer, criteria).call
+      when queue?    then EventReporter::Queue.new(instream, outstream, printer, criteria).call
+      when help?     then EventReporter::Help.new(instream, outstream, printer, criteria).call
+      when add?      then EventReporter::Add.new(instream, outstream, printer, criteria).call
+      when subtract? then EventReporter::Subtract.new(instream, outstream, printer, criteria).call
       when quit?
-      else             printer.invalid_command
+      else                printer.invalid_command
       end
     end
 
@@ -51,6 +53,14 @@ module EventReporter
 
     def help?
       command == 'help'
+    end
+
+    def add?
+      command == 'add'
+    end
+
+    def subtract?
+      command == 'subtract'
     end
 
     def get_input
