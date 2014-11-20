@@ -120,4 +120,18 @@ RSpec.describe EventReporter do
     expect(outstream.string).to include("4 records added to queue")
     outstream.string.slice! "4 records added to queue"
   end
+
+  it "successfully completes the 'queue math' spec" do
+    instream = StringIO.new("load\nfind zipcode 20011\nsubtract first_name william\nadd zipcode 20010\nq\n")
+    outstream = StringIO.new
+    EventReporter::CLI.new(instream, outstream).call
+    expect(outstream.string).to include("5175 entries")
+    outstream.string.slice! "5175 entries"
+    expect(outstream.string).to include("4 records added to queue")
+    outstream.string.slice! "4 records added to queue"
+    expect(outstream.string).to include("Removed 1 records from the queue")
+    outstream.string.slice! "Removed 1 records from the queue"
+    expect(outstream.string).to include("5 records added to queue")
+    outstream.string.slice! "5 records added to queue"
+  end
 end

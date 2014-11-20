@@ -80,6 +80,24 @@ module EventReporter
       outstream.puts
     end
 
+    def print_number_removed(number)
+      outstream.puts
+      outstream.puts ">>> Removed #{number} records from the queue"
+      outstream.puts
+    end
+
+    def no_queue_to_add_to
+      outstream.puts
+      outstream.puts ">>> No queue: you must have initialized a queue before adding to it"
+      outstream.puts
+    end
+
+    def no_queue_to_subtract_from
+      outstream.puts
+      outstream.puts ">>> No queue: you must have initialized a queue before subtracting from it"
+      outstream.puts
+    end
+
     def print_queue_count(records)
       outstream.puts
       outstream.puts ">>> #{records} records in queue"
